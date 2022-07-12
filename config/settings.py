@@ -35,6 +35,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 
 # Application definition
 
@@ -49,8 +51,15 @@ INSTALLED_APPS = [
     'django_filters',
     # DRF
     'rest_framework',
-    'corsheaders',
-    'drf_yasg',
+    'rest_framework.authtoken',  # приложения для генерации токена авторизации на стороне сервера
+    'drf_yasg',  # UI документация к API (аналог swagger)
+    "corsheaders",  # CORS заголовок, чтоб принимать запросы
+    # All-auth
+    'allauth',  # Подключаем пакет all-auth
+    'allauth.account',  # Подключаем пакет all-auth
+    'allauth.socialaccount',  # Подключаем пакет all-auth
+    'dj_rest_auth',  # Для реализации авторизации пользователей через API используем стороний пакет - dj_rest_auth
+    'dj_rest_auth.registration',  # Подключаем пакет all-auth
 
     # My apps
     'accounts',
