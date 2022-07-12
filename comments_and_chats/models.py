@@ -12,7 +12,7 @@ class Comment(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return f'Written {self.author.name} at {self.date_posted} лет.'
+        return f'Written {self.author.name} at {self.date_posted}'
 
 
 class CommentRating(models.Model):

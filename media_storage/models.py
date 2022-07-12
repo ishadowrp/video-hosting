@@ -8,7 +8,11 @@ class Media(models.Model):
     description = models.TextField()
     media = models.FileField(upload_to='content/%Y/%m/%d/')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
     views_count = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.title} by {self.author} at {self.date_posted}'
 
 
 class MediaRating(models.Model):
