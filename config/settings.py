@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     # Django-filters
     'django_filters',
     # DRF
@@ -66,6 +67,8 @@ INSTALLED_APPS = [
     'media_storage',
     'comments_and_chats',
 ]
+
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

@@ -1,31 +1,36 @@
 from django.db import models
 from media_storage.models import Media
-from accounts.models import CustomUser
+from django.contrib.auth.models import User
 
 
-# Create your models here.
 class Comment(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
-    author = models.ForeignKey(CustomUser, related_name='author', on_delete=models.CASCADE)
-    media_users = models.ManyToManyField(CustomUser, related_name='media_users')
+    author = models.ForeignKey(User, related_name='author', on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
 
     def __str__(self):
-        return f'Written {self.author.name} at {self.date_posted}'
+        return f'Written {self.author.username} at {self.date_posted}'
 
 
 class CommentRating(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
 
 
 class PrivatChat(models.Model):
     title = models.CharField(max_length=255)
-    owner = models.ForeignKey(CustomUser, related_name='owner', on_delete=models.CASCADE)
-    chat_users = models.ManyToManyField(CustomUser, related_name='chat_users')
+    chat_users = models.ManyToManyField(User, related_name='chat_users')
     date_created = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title
+
+
+class Message(models.Model):
+    chat = models.ForeignKey(PrivatChat, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()

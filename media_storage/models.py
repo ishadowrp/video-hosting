@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import CustomUser
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -7,7 +7,7 @@ class Media(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     media = models.FileField(upload_to='content/%Y/%m/%d/')
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
     views_count = models.IntegerField()
 
@@ -17,4 +17,5 @@ class Media(models.Model):
 
 class MediaRating(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
