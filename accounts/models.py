@@ -14,3 +14,9 @@ class ProfileData(models.Model):
         self.avatar.delete()
         super().delete(*args, **kwargs)
 
+
+def get_name(self):
+    return self.username
+
+
+User.add_to_class("__str__", get_name)

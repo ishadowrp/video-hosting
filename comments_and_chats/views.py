@@ -78,6 +78,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    filterset_fields = ['chat']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

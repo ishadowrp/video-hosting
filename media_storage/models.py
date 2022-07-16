@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# Create your models here.
 class Media(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -12,12 +11,11 @@ class Media(models.Model):
     views_count = models.IntegerField()
 
     def __str__(self):
-        return f'{self.title} by {self.author} at {self.date_posted}'
+        return f'{self.title} by {self.author.username} at {self.date_posted}'
 
     def delete(self, *args, **kwargs):
         self.media.delete()
         super().delete(*args, **kwargs)
-
 
 
 class MediaRating(models.Model):

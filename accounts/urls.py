@@ -5,9 +5,9 @@ from .views import UserViewSet, ProfileDataViewSet, UserAvatarAPIView
 
 router = SimpleRouter()
 router.register('users', UserViewSet, basename='users')
-router.register('profiles', ProfileDataViewSet, basename='profiles')
+router.register('users/profiles', ProfileDataViewSet, basename='profiles')
 
 urlpatterns = router.urls
-urlpatterns.append(path('profiles/image/', UserAvatarAPIView.as_view()),)
+urlpatterns.append(path('users/profiles/image/', UserAvatarAPIView.as_view()),)
 
 urlpatterns = format_suffix_patterns(urlpatterns)
