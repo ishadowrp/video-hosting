@@ -12,6 +12,17 @@ class Comment(models.Model):
     def __str__(self):
         return f'Written {self.author.username} at {self.date_posted}'
 
+    @property
+    def current_rating(self):
+        rating = CommentRating.objects.filter(comment=self)
+        if len(rating) > 0:
+            sum_rating = 0
+            for element in rating:
+                sum_rating += element.rating
+            return sum_rating / len(rating)
+        else:
+            return 0
+
 
 class CommentRating(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)

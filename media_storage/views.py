@@ -33,6 +33,8 @@ class MediaChatJoinAPIView(APIView):
     def get(self, request, pk):
         media = self.get_object(pk)
         comments = Comment.objects.filter(media__id=pk)
+        media.views_count += 1
+        media.save()
 
         list_of_comments = []
         for item in comments:
