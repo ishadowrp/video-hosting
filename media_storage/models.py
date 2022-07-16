@@ -14,6 +14,11 @@ class Media(models.Model):
     def __str__(self):
         return f'{self.title} by {self.author} at {self.date_posted}'
 
+    def delete(self, *args, **kwargs):
+        self.media.delete()
+        super().delete(*args, **kwargs)
+
+
 
 class MediaRating(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)

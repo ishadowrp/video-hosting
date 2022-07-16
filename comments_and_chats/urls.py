@@ -10,6 +10,6 @@ router.register('messages', MessageViewSet, basename='messages')
 router.register('private_chats', PrivateChatViewSet, basename='private chats')
 
 urlpatterns = router.urls
-urlpatterns.append(path('chat/join/<int:pk>/', PrivateChatJoinAPIView.as_view()),)
+urlpatterns.append(path('private_chats/join/<int:pk>/', PrivateChatJoinAPIView.as_view()),)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

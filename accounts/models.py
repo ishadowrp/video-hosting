@@ -9,3 +9,8 @@ class ProfileData(models.Model):
 
     def __str__(self):
         return self.username.username
+
+    def delete(self, *args, **kwargs):
+        self.avatar.delete()
+        super().delete(*args, **kwargs)
+

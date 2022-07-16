@@ -22,18 +22,24 @@ class ProfileDataViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
 
 
-class UserAvatarUpload(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+class UserAvatarAPIView(APIView):
+    permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = ProfileDataSerializer
 
-    def post(self, request, format=None):
+    @staticmethod  # Проверить работает ли со статик методом
+    def post(request):
         serializer = ProfileDataSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod  # Проверить работает ли со статик методом
+    def delete(request):
+        obj = ProfileData.objects.filter(username=request.user)
+        obj.avatar.delete()
 
     def perform_create(self, serializer):
         serializer.save(username=self.request.user)
