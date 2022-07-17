@@ -1,8 +1,12 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework import permissions
+from rest_framework.filters import SearchFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import Http404
+from rest_framework import status
+from rest_framework import filters
+
+from django.http import Http404, HttpResponse
 
 from accounts.permissions import IsOwnerOrReadOnly
 
@@ -15,6 +19,7 @@ class MediaViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated,)
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
+    filterset_fields = ['title']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -44,9 +49,21 @@ class MediaChatJoinAPIView(APIView):
 
         dict_response = {'chat': pk, 'title': media.title, 'comments': list_of_comments}
 
-        return Response(dict_response)
+        return Response(dict_response, status=status.HTTP_200_OK)
 
 
 class MediaRatingViewSet(viewsets.ModelViewSet):
     queryset = MediaRating.objects.all()
     serializer_class = MediaRatingSerializer
+
+
+class CustomSearchFilter(SearchFilter):
+    search_param = "media"
+
+
+class MediaSearchAPIView(generics.ListAPIView):
+    queryset = Media.objects.all()
+    permissions_classes = (permissions.IsAuthenticated,)
+    serializer_class = MediaSerializer
+    filter_backends = [CustomSearchFilter]
+    search_fields = ['title', 'description']
