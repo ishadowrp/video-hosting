@@ -1,5 +1,6 @@
+from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 
 from rest_framework import permissions  # Для динамической подготовки документации
@@ -38,5 +39,6 @@ urlpatterns = [
         'swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui(  # Формат документации ReDoc
         'redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^webpush/', include('webpush.urls')),
 ]
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

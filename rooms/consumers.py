@@ -12,6 +12,7 @@ from accounts.models import ProfileData
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+
     def __init__(self):
         self.room_group_name = 'chat_%s' % self.room_name
         self.room_name = self.scope['url_route']['kwargs']['room_name']

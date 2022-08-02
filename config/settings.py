@@ -61,7 +61,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',  # Подключаем пакет all-auth
     'dj_rest_auth',  # Для реализации авторизации пользователей через API используем стороний пакет - dj_rest_auth
     'dj_rest_auth.registration',  # Подключаем пакет all-auth
+    # Channels
     'channels',
+    # Web-Push
+    'webpush',
 
     # My apps
     'accounts',
@@ -70,6 +73,23 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+
+EMAIL_HOST = env('EMAIL_HOST')  # адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_PORT = env('EMAIL_PORT')  # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда
+# надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # пароль от почты
+EMAIL_USE_SSL = env('EMAIL_USE_SSL')  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его
+
+SERVER_EMAIL = env('SERVER_EMAIL')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+ADMINS = env('ADMINS')
+SERVER_EMAIL = env('SERVER_EMAIL')  # это будет у нас вместо аргумента FROM в массовой рассылке
+
+# Celery settings
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -84,6 +104,12 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://localhost:8000',
 )
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
+    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
+    "VAPID_ADMIN_EMAIL": env('EMAIL_ADMIN'),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
