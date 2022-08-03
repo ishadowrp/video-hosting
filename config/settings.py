@@ -63,8 +63,8 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',  # Подключаем пакет all-auth
     # Channels
     'channels',
-    # Web-Push
-    'webpush',
+    # # Web-Push  # Убрал, т.к. решил делать через WebSocket
+    # 'webpush',
 
     # My apps
     'accounts',
@@ -105,11 +105,11 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
 )
 
-WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
-    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
-    "VAPID_ADMIN_EMAIL": env('EMAIL_ADMIN'),
-}
+# WEBPUSH_SETTINGS = { # Убрал, т.к. решил делать через WebSocket
+#     "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
+#     "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
+#     "VAPID_ADMIN_EMAIL": env('EMAIL_ADMIN'),
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -203,7 +203,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# DRF доступ и аторизация
+# DRF доступ и авторизация
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
