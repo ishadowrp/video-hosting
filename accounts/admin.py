@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ProfileData
+from .models import ProfileData, Notification
 
 
 class ProfileAdminUser(admin.ModelAdmin):
@@ -9,4 +9,12 @@ class ProfileAdminUser(admin.ModelAdmin):
     search_fields = ('username__username', 'username__email', 'telephone',)  # тут всё очень похоже на фильтры из запросов в базу
 
 
+class NotificationAdminUser(admin.ModelAdmin):
+    list_display = ['user', 'message', 'created', 'status_read']
+    list_display_links = ('message', )
+    list_filter = ('user__username', 'status_read', )  # добавляем примитивные фильтры в нашу админку
+    search_fields = ('user__username', 'message',)  # тут всё очень похоже на фильтры из запросов в базу
+
+
 admin.site.register(ProfileData, ProfileAdminUser)
+admin.site.register(Notification, NotificationAdminUser)

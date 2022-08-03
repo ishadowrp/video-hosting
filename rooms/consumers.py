@@ -8,7 +8,7 @@ from channels.db import database_sync_to_async
 
 from comments_and_chats.models import Message, PrivatChat, Comment
 from media_storage.models import Media
-from accounts.models import ProfileData, Notifications
+from accounts.models import ProfileData, Notification
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -85,11 +85,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print('chat not found')
 
 
-class NotificationsConsumer(AsyncWebsocketConsumer):
+class NotificationConsumer(AsyncWebsocketConsumer):
 
     def __init__(self):
         self.room_name = self.scope['url_route']['kwargs']['user_name']
-        self.room_group_name = 'notifications_%s' % self.room_name
+        self.room_group_name = 'notification_%s' % self.room_name
 
     async def connect(self):
 
@@ -138,7 +138,7 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
     def change_status(self, notification_id, status):
         if status == 'read':
             try:
-                notification = Notifications.objects.get(id=int(notification_id))
+                notification = Notification.objects.get(id=int(notification_id))
                 notification.status_read = True
                 notification.save()
             except ObjectDoesNotExist:

@@ -23,7 +23,7 @@ def get_name(self):
 User.add_to_class("__str__", get_name)
 
 
-class Notifications(models.Model):
+class Notification(models.Model):
     user = models.ForeignKey(User, related_name='Notifications_owner', on_delete=models.CASCADE)
     status_read = models.BooleanField()
     message = models.TextField()
