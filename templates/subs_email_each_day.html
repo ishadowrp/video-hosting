@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Здравствуй, {{usr.first_name}} {{usr.last_name}}. У нас для вас новые уведомления!</h2>
+    <table>
+      <thead>
+        <th>
+          From
+        </th>
+        <th>
+          Created
+        </th>
+        <th>
+          Notification
+        </th>
+      </thead>
+      <tbody>
+        {% for notification in notifications %}
+        <tr>
+            <td>
+                {{ notification.created|date:'d M Y' }}
+            </td>
+            <td>
+                {{ notification.message }}
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</body>
+</html>
