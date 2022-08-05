@@ -22,7 +22,7 @@ def notifications_email_sending():
                 dict(notifications=list_of_notifications, usr=u, full_url=full_url)
             )
             msg = EmailMultiAlternatives(
-                subject=f'Hi, {u.first_name} {u.last_name}. You missed some notifications',
+                subject=f'Hi, {u.first_name} {u.last_name}. You missed several notifications in the last 3 days',
                 body='',
                 # это то же, что и message
                 from_email='ilya.dinaburgskiy@yandex.ru',
