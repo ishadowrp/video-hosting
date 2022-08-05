@@ -8,8 +8,8 @@ import rooms.routing
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 application = ProtocolTypeRouter({
-  "http": get_asgi_application(),
-  "websocket": AuthMiddlewareStack(
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
         TokenAuthMiddleware(
             URLRouter(
                 rooms.routing.websocket_urlpatterns
@@ -17,11 +17,3 @@ application = ProtocolTypeRouter({
         ),
     ),
 })
-
-import os
-
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-
-application = get_asgi_application()

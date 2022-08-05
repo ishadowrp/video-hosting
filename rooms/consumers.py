@@ -12,12 +12,9 @@ from accounts.models import ProfileData, Notification
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
-
-    def __init__(self):
-        self.room_group_name = 'chat_%s' % self.room_name
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-
     async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = 'chat_%s' % self.room_name
 
         # Join room group
         await self.channel_layer.group_add(
@@ -86,12 +83,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
-
-    def __init__(self):
-        self.room_name = self.scope['url_route']['kwargs']['user_name']
-        self.room_group_name = 'notification_%s' % self.room_name
-
     async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = 'notification_%s' % self.room_name
 
         # Join notifications group
         await self.channel_layer.group_add(
@@ -128,6 +122,22 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         )
 
         await self.change_status(notification_id, status)
+
+    async def send_notification(self, notification):
+        print('send notification'+notification.message)
+        self.room_name = self.scope['url_route']['kwargs'][str(notification.user)]
+        self.room_group_name = 'notification_%s' % self.room_name
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'notification_id': str(notification.pk),
+                'username': str(notification.user),
+                'userID': str(notification.user.pk),
+                'created': notification.created,
+                'message': notification.message,
+                'status': notification.status_read
+            }
+        )
 
     # Receive message from room group
     async def chat_message(self, event):

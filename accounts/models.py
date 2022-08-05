@@ -5,7 +5,7 @@ from django.db import models
 class ProfileData(models.Model):
     username = models.ForeignKey(User, related_name='photo_owner', on_delete=models.CASCADE)
     telephone = models.CharField(max_length=20)
-    telephone_verified = models.BooleanField()
+    telephone_verified = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='img', max_length=254, blank=True)
 
     def __str__(self):
@@ -25,7 +25,7 @@ User.add_to_class("__str__", get_name)
 
 class Notification(models.Model):
     user = models.ForeignKey(User, related_name='Notifications_owner', on_delete=models.CASCADE)
-    status_read = models.BooleanField()
+    status_read = models.BooleanField(default=False)
     message = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 

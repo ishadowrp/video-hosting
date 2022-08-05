@@ -32,6 +32,7 @@ class CommentRating(models.Model):
 
 class PrivatChat(models.Model):
     title = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author_messages")
     chat_users = models.ManyToManyField(User, related_name='chat_users')
     date_created = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=255)
