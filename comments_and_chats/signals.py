@@ -16,7 +16,7 @@ def notify_users_new_message(sender, instance, created, **kwargs):
                                                            message=f'You have received a new message from {str(instance.author)}',
                                                            status_read=False)
                 channel_layer = get_channel_layer()
-                async_to_sync(channel_layer.group_send)(instance.media.author.username, {
+                async_to_sync(channel_layer.group_send)(user.username, {
                     'notification_id': notification.pk,
                     'username': str(notification.user),
                     'userID': str(notification.user.pk),
@@ -50,7 +50,7 @@ def notify_users_new_message(sender, instance, created, **kwargs):
                                                    message=f'You have received a new rating on your comment from {str(instance.author)}',
                                                    status_read=False)
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(instance.media.author.username, {
+        async_to_sync(channel_layer.group_send)(instance.comment.author.username, {
             'notification_id': notification.pk,
             'username': str(notification.user),
             'userID': str(notification.user.pk),
