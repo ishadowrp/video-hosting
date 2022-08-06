@@ -2,3 +2,4 @@
 /postres.yml
 /.idea
 /media
+/celerybeat-schedule
