@@ -105,11 +105,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
 )
 
-# WEBPUSH_SETTINGS = { # Убрал, т.к. решил делать через WebSocket
-#     "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
-#     "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
-#     "VAPID_ADMIN_EMAIL": env('EMAIL_ADMIN'),
-# }
+VONAGE_API_KEY = env("VONAGE_API_KEY")
+VONAGE_API_SECRET = env("VONAGE_API_SECRET")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -194,7 +191,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

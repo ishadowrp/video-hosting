@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model  # Для подключения к API пользователей
 from rest_framework import serializers
-from .models import ProfileData
+from .models import ProfileData, VerificationData
 
 
 class UserSerializer(serializers.ModelSerializer):  # Для подключения к API пользователей
@@ -13,3 +13,10 @@ class ProfileDataSerializer(serializers.ModelSerializer):  # Для подклю
     class Meta:
         model = ProfileData
         fields = ('id', 'username', 'telephone', 'avatar',)
+
+
+class VerificationPhoneSerializer(serializers.Serializer):
+    class Meta:
+        model = VerificationData
+        fields = ('code', )
+
