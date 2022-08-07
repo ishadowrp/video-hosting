@@ -13,10 +13,14 @@ class ProfileDataSerializer(serializers.ModelSerializer):  # Для подклю
     class Meta:
         model = ProfileData
         fields = ('id', 'username', 'telephone', 'avatar',)
+        extra_kwargs = {'username': {'required': False}}
+        lookup_field = 'username'
 
 
 class VerificationPhoneSerializer(serializers.Serializer):
     class Meta:
         model = VerificationData
-        fields = ('code', )
+        fields = ('profile', 'request_id', 'code', )
+        extra_kwargs = {'profile': {'required': False},
+                        'request_id': {'required': False}}
 
