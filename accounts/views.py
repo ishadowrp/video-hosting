@@ -14,7 +14,6 @@ from nexmo import check_verification
 class VerificationTelephoneCheck(APIView):
     permission_classes = (IsUserOrReadOnly, permissions.IsAuthenticated,)
 
-    # @staticmethod  # Проверить работает ли со статик методом
     @staticmethod
     def patch(request):
         serializer = VerificationPhoneSerializer(data=request.data)
