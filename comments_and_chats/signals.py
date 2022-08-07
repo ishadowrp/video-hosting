@@ -1,10 +1,11 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver  # импортируем нужный декоратор
 from .models import PrivatChat, CommentRating
-from accounts.models import Notification
+from accounts.models import Notification, ProfileData
 from media_storage.models import MediaRating
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from accounts.nexmo import request_verification
 
 
 @receiver(post_save, sender=PrivatChat)
@@ -58,3 +59,9 @@ def notify_users_new_message(sender, instance, created, **kwargs):
             'message': notification.message,
             'status': notification.status_read
         })
+
+
+@receiver(post_save, sender=ProfileData)
+def send_verification(sender, instance, created, **kwargs):
+    if created:
+        request_verification(instance)
