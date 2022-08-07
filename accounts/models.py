@@ -32,6 +32,6 @@ class Notification(models.Model):
 
 class VerificationData(models.Model):
     profile = models.ForeignKey(ProfileData, related_name='User_profile', on_delete=models.CASCADE)
-    request_id = models.CharField()
+    request_id = models.CharField(max_length=100)
     code = models.IntegerField()
 

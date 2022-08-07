@@ -5,17 +5,20 @@ from django.contrib.auth import get_user_model
 from .permissions import IsUserOrReadOnly
 from .serializers import UserSerializer, ProfileDataSerializer, VerificationPhoneSerializer
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework import status
-from nexmo import check_verification
+from .nexmo import check_verification
 
 
-class VerificationTelephoneCheck(APIView):
+class VerificationApiView(UpdateAPIView):
     permission_classes = (IsUserOrReadOnly, permissions.IsAuthenticated,)
+    serializer_class = VerificationPhoneSerializer
 
-    @staticmethod
-    def patch(request):
+    @action(detail=True, methods=['patch'])
+    def patch(self, request):
         serializer = VerificationPhoneSerializer(data=request.data)
         if serializer.is_valid():
             profile = ProfileData.objects.get(username=request.user)
@@ -52,8 +55,7 @@ class UserAvatarAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = ProfileDataSerializer
 
-    @staticmethod  # Проверить работает ли со статик методом
-    def post(request):
+    def post(self, request):
         serializer = ProfileDataSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -61,8 +63,7 @@ class UserAvatarAPIView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @staticmethod  # Проверить работает ли со статик методом
-    def delete(request):
+    def delete(self, request):
         obj = ProfileData.objects.filter(username=request.user)
         obj.avatar.delete()
 
