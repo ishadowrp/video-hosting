@@ -1,12 +1,38 @@
+import json
 from rest_framework import viewsets, permissions
-from .models import ProfileData
+from .models import ProfileData, VerificationData
 from django.contrib.auth import get_user_model
 from .permissions import IsUserOrReadOnly
-from .serializers import UserSerializer, ProfileDataSerializer
+from .serializers import UserSerializer, ProfileDataSerializer, VerificationPhoneSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
+from nexmo import check_verification
+
+
+class VerificationTelephoneCheck(APIView):
+    permission_classes = (IsUserOrReadOnly, permissions.IsAuthenticated,)
+
+    # @staticmethod  # Проверить работает ли со статик методом
+    @staticmethod
+    def patch(request):
+        serializer = VerificationPhoneSerializer(data=request.data)
+        if serializer.is_valid():
+            profile = ProfileData.objects.get(username=request.user)
+            str_data = json.dumps(request.data)
+            data = json.loads(str_data)
+            status_verification = check_verification(profile, data)
+            if status_verification:
+                profile.telephone_verified = True
+                profile.save()
+                verification = VerificationData.get(profile=profile)
+                verification.delete()  # Почистил отработанную информацию
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
