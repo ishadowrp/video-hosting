@@ -1,16 +1,19 @@
+import datetime
+import pytz
+
 from celery import shared_task
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from accounts.models import Notification, User
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-import datetime
 
 
 @shared_task
 def notifications_email_sending():
-    end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=3)
+    moscow_timezone = pytz.timezone('Europe/Moscow')
+    end_date = moscow_timezone.localize(datetime.datetime.now())
+    start_date = end_date - moscow_timezone.localize(datetime.timedelta(days=3))
     full_url = ''.join(['http://', get_current_site(None).domain, ':8000'])
 
     for u in User.objects.all():
