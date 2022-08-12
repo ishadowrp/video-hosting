@@ -104,27 +104,27 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        notification_id = text_data_json['id']
+        notification_id = text_data_json['notification_id']
         status = text_data_json['status']
-        created = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'notification_id': notification_id,
-                'username': str(self.scope["user"]),
-                'userID': str(self.scope["user"].pk),
-                'created': created,
-                'message': message,
-                'status': status
-            }
-        )
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         'type': 'chat_message',
+        #         'username': str(self.scope["user"]),
+        #         'userID': str(self.scope["user"].pk),
+        #         'created': created,
+        #         'message': {
+        #             'notification_id': notification_id,
+        #             'message': message,
+        #             'status': status
+        #         },
+        #     }
+        # )
 
         await self.change_status(notification_id, status)
 
     async def send_notification(self, notification):
-        print('send notification'+notification.message)
         self.room_name = self.scope['url_route']['kwargs'][str(notification.user)]
         self.room_group_name = 'notification_%s' % self.room_name
         await self.channel_layer.group_send(
@@ -146,7 +146,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def change_status(self, notification_id, status):
-        if status == 'read':
+        if status:
             try:
                 notification = Notification.objects.get(id=int(notification_id))
                 notification.status_read = True
