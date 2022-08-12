@@ -1,4 +1,4 @@
-# Video-hosting (My Youtube)
+# Video-hosting (MyTube)
 
 Этот проект реализует бэкэнд для видео-хостинга. В нем используются следующие технологии:
 Django
