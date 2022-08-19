@@ -12,8 +12,8 @@ from accounts.models import Notification, User
 @shared_task
 def notifications_email_sending():
     moscow_timezone = pytz.timezone('Europe/Moscow')
-    end_date = moscow_timezone.localize(datetime.datetime.now())
-    start_date = end_date - moscow_timezone.localize(datetime.timedelta(days=3))
+    end_date = datetime.datetime.now()
+    start_date = end_date - datetime.timedelta(days=3)
     full_url = ''.join(['http://', get_current_site(None).domain, ':8000'])
 
     for u in User.objects.all():
