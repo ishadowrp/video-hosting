@@ -1,6 +1,6 @@
 from rest_framework import viewsets, generics
 from rest_framework import permissions
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -67,3 +67,10 @@ class MediaSearchAPIView(generics.ListAPIView):
     serializer_class = MediaSerializer
     filter_backends = [CustomSearchFilter]
     search_fields = ['title', 'description']
+
+
+class MediaOrderAPIView(generics.ListAPIView):
+    queryset = Media.objects.all()
+    serializer_class = MediaSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ('views_count', 'date_posted')
