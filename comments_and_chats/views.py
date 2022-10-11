@@ -23,7 +23,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class CommentListByMedia(ListAPIView):
-    queryset = Comment.objects.all().order_by('-date_posted')
+    queryset = Comment.objects.all()
+        # .order_by('-date_posted')
     serializer_class = CommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_fields = ('media',)
