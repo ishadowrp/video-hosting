@@ -5,7 +5,7 @@ from .views import MediaViewSet, MediaRatingViewSet, MediaChatJoinAPIView, Media
 
 router = SimpleRouter()
 router.register('media', MediaViewSet, basename='media')
-router.register('media/rating', MediaRatingViewSet, basename='media rating')
+router.register('rating', MediaRatingViewSet, basename='media rating')
 
 urlpatterns = router.urls
 urlpatterns.append(path('media/join/<int:pk>/', MediaChatJoinAPIView.as_view()),)

@@ -13,6 +13,10 @@ class Comment(models.Model):
         return f'Written {self.author.username} at {self.date_posted}'
 
     @property
+    def username(self):
+        return self.author.username
+
+    @property
     def current_rating(self):
         rating = CommentRating.objects.filter(comment=self)
         if len(rating) > 0:

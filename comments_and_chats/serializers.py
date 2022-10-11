@@ -21,8 +21,9 @@ class MessageSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'media', 'author', 'date_posted', 'current_rating', 'content')
-        extra_kwargs = {'author': {'required': False}, }
+        fields = ('id', 'media', 'author', 'username', 'date_posted', 'current_rating', 'content')
+        extra_kwargs = {'author': {'required': False},
+                        'author__username': {'required': False}}
 
 
 class CommentRatingSerializer(serializers.ModelSerializer):

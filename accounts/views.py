@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions
 from .models import ProfileData, VerificationData
 from django.contrib.auth import get_user_model
 from .permissions import IsUserOrReadOnly
-from .serializers import UserSerializer, ProfileDataSerializer, VerificationPhoneSerializer
+from .serializers import UserSerializer, ProfileDataSerializer, VerificationPhoneSerializer, AvatarDataSerializer
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.decorators import action
@@ -17,7 +17,7 @@ class VerificationApiView(UpdateAPIView):
     permission_classes = (IsUserOrReadOnly, permissions.IsAuthenticated,)
     serializer_class = VerificationPhoneSerializer
 
-    @action(detail=True, methods=['patch'])
+    # @action(detail=True, methods=['patch'])
     def patch(self, request):
         serializer = VerificationPhoneSerializer(data=request.data)
         if serializer.is_valid():
@@ -44,19 +44,22 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class ProfileDataViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
     queryset = ProfileData.objects.all()
     serializer_class = ProfileDataSerializer
     lookup_field = 'username'
+
+    def perform_create(self, serializer):
+        serializer.save(id=self.request.user.id, username=self.request.user)
 
 
 class UserAvatarAPIView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsUserOrReadOnly)
     parser_classes = [MultiPartParser, FormParser]
-    serializer_class = ProfileDataSerializer
+    serializer_class = AvatarDataSerializer
 
     def post(self, request):
-        serializer = ProfileDataSerializer(data=request.data)
+        serializer = AvatarDataSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

@@ -3,9 +3,10 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 from django.http import Http404
 from django.contrib.auth import get_user_model
-
+from django_filters import rest_framework as filters
 from accounts.permissions import IsOwnerOrReadOnly
 
 from .serializers import CommentSerializer, CommentRatingSerializer, MessageSerializer, PrivateChatSerializer
@@ -19,6 +20,13 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class CommentListByMedia(ListAPIView):
+    queryset = Comment.objects.all().order_by('-date_posted')
+    serializer_class = CommentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('media',)
 
 
 class CommentRatingViewSet(viewsets.ModelViewSet):

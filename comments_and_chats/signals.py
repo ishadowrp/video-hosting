@@ -34,11 +34,13 @@ def notify_users_new_private_message(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=MediaRating)
 def notify_users_new_rating(sender, instance, created, **kwargs):
-    if created:
+    if created and not (instance.media.author == instance.author):
         notification = Notification.objects.create(user=instance.media.author,
                                                    message=f'You have received a new rating on your media from {str(instance.author)}',
                                                    status_read=False)
         channel_layer = get_channel_layer()
+        print(channel_layer)
+        print('notification_%s' % instance.media.author.username)
         async_to_sync(channel_layer.group_send)('notification_%s' % instance.media.author.username, {
             "type": "chat.message",
             "room_id": instance.media.author.username,
@@ -53,7 +55,7 @@ def notify_users_new_rating(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Comment)
 def notify_users_new_rating(sender, instance, created, **kwargs):
-    if created:
+    if created and not (instance.media.author == instance.author):
         notification = Notification.objects.create(user=instance.media.author,
                                                    message=f'You have received a new comment on your media from {str(instance.author)}',
                                                    status_read=False)
@@ -72,7 +74,7 @@ def notify_users_new_rating(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=CommentRating)
 def notify_users_new_comment_rating(sender, instance, created, **kwargs):
-    if created:
+    if created and not (instance.comment.author == instance.author):
         notification = Notification.objects.create(user=instance.comment.author,
                                                    message=f'You have received a new rating on your comment from {str(instance.author)}',
                                                    status_read=False)
