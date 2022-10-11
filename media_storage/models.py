@@ -33,3 +33,6 @@ class MediaRating(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
+
+    class Meta:
+        unique_together = ['media', 'author']

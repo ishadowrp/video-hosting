@@ -4,9 +4,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import filters
 
-from django.http import Http404, HttpResponse
+from django.http import Http404
 
 from accounts.permissions import IsOwnerOrReadOnly
 
@@ -53,8 +52,17 @@ class MediaChatJoinAPIView(APIView):
 
 
 class MediaRatingViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = MediaRating.objects.all()
     serializer_class = MediaRatingSerializer
+
+    def get_queryset(self):
+        media_id = self.request.GET.get('media')
+        author_id = self.request.GET.get('author')
+        return MediaRating.objects.filter(media_id=media_id, author_id=author_id)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 class CustomSearchFilter(SearchFilter):
