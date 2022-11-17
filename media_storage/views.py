@@ -4,6 +4,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters import rest_framework as filters
 
 from django.http import Http404
 
@@ -59,7 +60,10 @@ class MediaRatingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         media_id = self.request.GET.get('media')
         author_id = self.request.GET.get('author')
-        return MediaRating.objects.filter(media_id=media_id, author_id=author_id)
+        if media_id and author_id:
+            return MediaRating.objects.filter(media_id=media_id, author_id=author_id)
+        else:
+            return MediaRating.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -75,6 +79,14 @@ class MediaSearchAPIView(generics.ListAPIView):
     serializer_class = MediaSerializer
     filter_backends = [CustomSearchFilter]
     search_fields = ['title', 'description']
+
+
+class MediaByAuthorAPIView(generics.ListAPIView):
+    queryset = Media.objects.all()
+    permissions_classes = (permissions.IsAuthenticated,)
+    serializer_class = MediaSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('author',)
 
 
 class MediaOrderAPIView(generics.ListAPIView):

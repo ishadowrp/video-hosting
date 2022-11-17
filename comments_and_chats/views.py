@@ -4,9 +4,9 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
+from django_filters import rest_framework as filters
 from django.http import Http404
 from django.contrib.auth import get_user_model
-from django_filters import rest_framework as filters
 from accounts.permissions import IsOwnerOrReadOnly
 
 from .serializers import CommentSerializer, CommentRatingSerializer, MessageSerializer, PrivateChatSerializer

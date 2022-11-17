@@ -10,3 +10,5 @@ django-webpush
 allauth
 celery~=5.2.7
 asgiref~=3.4.1
+django-filter~=22.1
+pytz~=2021.3
