@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):  # Для подключен�
 class ProfileDataSerializer(serializers.ModelSerializer):  # Для подключения к API пользователей
     class Meta:
         model = ProfileData
-        fields = ('id', 'username', 'telephone', 'avatar',)
+        fields = ('id', 'username', 'telephone', 'avatar', 'telephone_verified')
         extra_kwargs = {'username': {'required': False}}
         lookup_field = 'username'
 
