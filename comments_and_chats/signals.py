@@ -93,5 +93,4 @@ def notify_users_new_comment_rating(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=ProfileData)
 def send_verification(sender, instance, created, **kwargs):
-    if created:
-        request_verification(instance)
+    request_verification(instance)

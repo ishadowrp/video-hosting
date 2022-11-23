@@ -6,9 +6,8 @@ from .permissions import IsUserOrReadOnly
 from .serializers import UserSerializer, ProfileDataSerializer, VerificationPhoneSerializer, AvatarDataSerializer
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from .nexmo import check_verification
 
@@ -17,7 +16,6 @@ class VerificationApiView(UpdateAPIView):
     permission_classes = (IsUserOrReadOnly, permissions.IsAuthenticated,)
     serializer_class = VerificationPhoneSerializer
 
-    # @action(detail=True, methods=['patch'])
     def patch(self, request):
         serializer = VerificationPhoneSerializer(data=request.data)
         if serializer.is_valid():
@@ -28,8 +26,7 @@ class VerificationApiView(UpdateAPIView):
             if status_verification:
                 profile.telephone_verified = True
                 profile.save()
-                verification = VerificationData.get(profile=profile)
-                verification.delete()  # Почистил отработанную информацию
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
