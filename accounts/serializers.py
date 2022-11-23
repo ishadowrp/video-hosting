@@ -29,6 +29,5 @@ class VerificationPhoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerificationData
         fields = ('profile', 'request_id', 'code',)
-        extra_kwargs = {'profile': {'required': False},
-                        'request_id': {'required': False}}
+        extra_kwargs = {'request_id': {'required': False}}
 
